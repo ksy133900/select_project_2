@@ -234,7 +234,7 @@ span {
         {% for follower in user.followers.all %}
       <span style="color: gray"> 회원님을 팔로우한 유저</span></div>
 
-      <div class="feed_name" style="justify-content: space-between">
+      <div class="feed_name" style="justify-content: space-between; flex-direction: column;">
           <div style="display: flex; align-items: center; flex-direction: column;">
               <div class="big_profile_box">
       <a href="{% url 'accounts:detail' follower.pk %}" class="modal-followers" style="color: black; text-decoration: none;">
