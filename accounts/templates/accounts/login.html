@@ -1,14 +1,45 @@
 {% extends 'base.html' %}
 {% load django_bootstrap5 %}
+{% load static %}
+
+{% block css %}
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+{% endblock css %}
+
+
 
 {% block content %}
-<div class="container mt-3 mb-3">
-  <h1>로그인</h1>
-  <form action="" method="POST">
+
+
+<body style="background-color: #FAFAFA;height: 100%">
+  <div style="font-size: 14px;text-align: center;width: 100%;min-height: 100vh;display: flex; flex-direction: row; align-items: center; justify-content: center">
+    <div>
+      <div class="mb-3" style="background-color: white; width: 350px; height: 380px; border: 1px solid rgba(0, 0, 0, 0.18);">
+        <div style="display: flex;align-items: center;justify-content: center">
+          <img style="height: 50px; object-fit: contain; margin: 30px 0" src="{% static 'img/logo.jpg' %}">
+        </div>
+
+  <form class="mb-3" action="{% url 'accounts:login' %}" method="POST" enctype="multipart/form-data"
+    style="font-size:14px;">
     {% csrf_token %}
-    {% bootstrap_form form %}
-    {% bootstrap_button button_type="submit" content="OK" %}
-    {% comment %}  {% endcomment %}
+    <div class="my-3 px-3">
+      <input type="text" style="height: 46px; border: 1.5px solid rgb(221, 221, 222);" name="username" autofocus=""
+        autocapitalize="none" autocomplete="username" maxlength="150" class="form-control" placeholder="아이디를 입력해주세요"
+        required="" id="id_username">
+    </div>
+    <div class="my-3 px-3">
+      <input type="password" style="height: 46px; border: 1.5px solid rgb(221, 221, 222);" name="password"
+        autocomplete="current-password" class="form-control" placeholder="비밀번호를 입력해주세요" required="" id="id_password">
+    </div>
+    <div class="px-3">
+    <input type="submit" class="btn py-2 px-3 form-control fw-bold" style="background-color: #263088; color: white"
+      value="로그인">
   </form>
-</div>
+  </div>
+  <div class="px-3">
+  <a href="{% url 'accounts:signup' %}"> <input class="btn py-2 form-control fw-bold"
+      style="border:2px solid #5e0080;background-color: white; color: #5e0080" value="회원가입"></a>
+    </div>
+</section>
+
 {% endblock content %}
