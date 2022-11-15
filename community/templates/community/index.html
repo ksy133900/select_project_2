@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+{% endblock css %}
+
+{% block content %}
+  <div class="container">
+    <div class="pt-4">
+
+        <table class="table table-hover rounded-5" style="">
+        <thead style="background: #70d7e740; border-top: 0px solid #ccc; border-bottom: 2px solid #004af14a; font-weight: bold;">
+            <tr style="text-align: center;">
+            <th scope="col">번호</th>
+            <th scope="col">제목</th>
+            <th scope="col">작성일</th>
+            <th scope="col">작성자</th>
+            <th scope="col">조회수</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for article in articles %}
+            <tr>
+                <!-- <th scope="row" class="align-middle col-md-1">{{ forloop.revcounter }}</td> -->
+                <th scope="row" class="align-middle col-md-1" style="text-align: center;">{{ article.pk }}</td>
+                <td class="align-middle col-md-7">
+                <a href="{% url 'community:detail' article.pk %}" class="text-decoration-none">{{ article.title }}</a><span class="text-muted"> ({{ article.comments_set.all.count }})</span>
+                </td>
+                <td class="align-middle col-md-1" style="text-align: center;">{{ article.created_at|date:'m.d' }}</td>
+                <td class="align-middle col-md-1" style="text-align: center;"><a href="{% url 'accounts:detail' article.user.pk %}">{{ article.user.nickname }}</a></a></td>
+                <td class="align-middle col-md-1" style="text-align: center;">{{ article.view_count }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        </table>
+    </div>
+    <div class="d-flex justify-content-end">
+      <a href="{% url 'community:create' %}">
+        <button type="button" class="btn btn-outline-primary">글쓰기</button>
+      </a>
+    </div>
+    <!--페이징-->
+    <ul class="pagination pagination justify-content-center">
+      <!--이전페이지-->
+      {% if articles.has_previous %}
+      <li class="page-item">
+        <a href="?page={{ articles.previous_page_number }}" class="page-link">이전</a>
+      </li>
+      {% else %}
+      <li class="page-item disabled">
+        <a href="#" class="page-link" aria-disabled="true">이전</a>
+      </li>
+      {% endif %}
+      <!--페이지리스트-->
+      {% for page_number in articles.paginator.page_range %}
+      {% if page_number >= articles.number|add:-5 and page_number <= articles.number|add:5 %}
+        {% if page_number == articles.number %}
+        <li class="page-item active" aria-current="page">
+          <a href="?page={{ page_number }}" class="page-link">{{ page_number }}</a>
+        </li>
+        {% else %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>
+        </li>
+        {% endif %}
+      {% endif %}
+      {% endfor %}
+      <!--다음페이지-->
+      {% if articles.has_next %}
+      <li class="page-item">
+        <a href="?page={{ articles.next_page_number }}" class="page-link">다음</a>
+      </li>
+      {% else %}
+      <li class="page-item disabled">
+        <a href="#" class="page-link" aria-disabled="true">다음</a>
+      </li>
+      {% endif %}
+    </ul>
+  </div>
+  
+{% endblock content %}

@@ -1,0 +1,372 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block css %}
+<style>
+  .main_body {
+    display: flex;
+    justify-content: center;
+
+    background-color: #FAFAFA;
+    z-index: 1;
+}
+
+.left_body {
+    margin-right: 100px;
+    width: 600px;
+    height: 1000px;
+    display: flex;
+    flex-direction: column;
+}
+
+.right_body {
+      padding-top: 20px;
+      width: 300px;
+      height: 1000px;
+      left: 72%;
+      position: fixed;
+  }
+
+.feed_box {
+    background-color: white;
+    width: 580px;
+    margin: 10px;
+    min-height: auto;
+    padding-bottom: 10px;
+}
+
+.feed_img {
+    width: 100%;
+    object-fit: contain;
+}
+
+.feed_content {
+    padding: 0px 10px;
+}
+
+.feed_like {
+    padding: 0px 10px;
+}
+
+.feed_reply {
+    padding: 0px 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+
+
+.feed_txt {
+    font-size: 14px;
+}
+
+
+.feed_icon {
+    padding: 5px 5px 0px 5px;
+    display: flex;
+    justify-content: space-between;
+}
+
+span {
+    padding-right: 5px;
+}
+
+.feed_name {
+    padding: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.feed_name_txt {
+    font-size: 14px;
+    padding: 0px 10px;
+    font-weight: bold;
+}
+
+.profile_box {
+    width: 40px;
+    height: 40px;
+    border-radius: 70%;
+    overflow: hidden;
+}
+
+.navi_profile_box {
+    width: 30px;
+    height: 30px;
+    border-radius: 70%;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.profile_img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.name_content {
+    display: flex;
+    flex-direction: column;
+    padding: 1px;
+    margin-bottom: 2px;
+}
+
+.name_content_txt {
+    font-size: 12px;
+    padding: 0px 10px;
+    font-weight: bold;
+    color: rgb(117, 125, 133);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 190px;
+}
+
+.big_profile_box {
+    width: 85px;
+    height: 85px;
+    border-radius: 70%;
+    overflow: hidden;
+}
+</style>
+{% endblock css %}
+{% block content %}
+
+  <form role="search" action="{% url 'articles:search' %}" class="p-5">
+    <div class="d-flex justify-content-center">
+      <select class="form-select w-auto" name="search_option">
+        <option value="title">제목</option>
+        <option value="title_content">제목+내용</option>
+        <option value="hashtag">해시태그</option>
+        <option value="user">작성자</option>
+      </select>
+      
+      <input class="form-control w-50 mx-2" type="search" placeholder="Search" name="search">
+      <input class="btn btn-success" type="submit" value="검색">
+    </div>
+  </form>
+
+  <div class="main_body">
+    <div class="left_body">
+        {% for article in articles %}
+
+            <div class="border feed_box">
+                <div class="feed_name">
+                    <div class="profile_box">
+                        <a href="{% url 'accounts:detail' article.user.pk %}" class="text-dark">
+                        {% if article.user.profile.image %}                        
+                        <img class="profile_img" src="{{ article.user.profile.image.url }}">
+                        {% else %}
+                        <img src="{% static 'images/dummy-image-square.jpg' %}" alt="" class="rounded-2 border border-1" width="40px">
+                      {% endif %}
+                    </div>
+                    <span class="feed_name_txt"> {{ article.user.nickname }}</span>
+                </a>
+                </div>
+          
+
+
+                
+                {% if article.photo_set.all.0.image %}
+                <img class="feed_img" src="{{ article.photo_set.all.0.image.url }}">
+                {% else %}
+                <img src="https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg" class="card-img-top" height="300px">
+              {% endif %}
+  
+         
+              <!-- 좋아요, 댓글, 조회수, 북마크 -->
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="text-muted fs-6">
+                  {% if request.user.is_authenticated %}
+                    <form class="like-forms d-inline" data-article-id="{{ article.pk }}">
+                      {% csrf_token %}
+                      {% if request.user in article.like_users.all %}
+                        <button type="submit" id="btn-like-{{ article.pk }}" class="btn-none bi bi-heart-fill text-danger"></button>
+                      {% else %}
+                        <button type="submit" id="btn-like-{{ article.pk }}" class="btn-none bi bi-heart"></button>
+                      {% endif %}
+                    </form>
+                    <span id="like-{{ article.pk }}-count" class="text-muted me-3">{{ article.like_users.count }}</span>
+                  {% endif %}
+
+                  <span class="bi bi-chat-dots-fill me-3"> 
+                    <span class="">{{ article.comment_set.all.count }}</span>
+                  </span>
+                  <span class="bi bi-eye-fill"> 
+                    <span class="">{{ article.view_count }}</span>
+                  </span>
+               
+
+                </div>
+      
+
+                <div>
+                  <i class="bi bi-geo-alt-fill fs-6 text-primary"></i>
+                  <span class="fs-6 text-primary ms-1 location">{{article.location}}</span>
+                  {% if request.user.is_authenticated %}
+                    <form class="bookmark-forms d-inline me-2" data-article-id="{{ article.pk }}">
+                      {% if request.user in article.bookmark_users.all %}
+                        <button type="submit" id="btn-bookmark-{{ article.pk }}" data-article-id="{{ article.pk }}" class="btn-none bi bi-bookmark-fill"></button>
+                      {% else %}
+                        <button type="submit" id="btn-bookmark-{{ article.pk }}" data-article-id="{{ article.pk }}" class="btn-none bi bi-bookmark"></button>
+                      {% endif %}
+                    </form>
+                 
+                  {% endif %}
+                </div>
+                
+              </div>
+              <span class="ms-2"> {% for tag in article.tags.all %}
+                <a href="/search/?search_option=hashtag&amp;search={{ tag.name }}" class="text-decoration-none fs-6">#{{ tag.name }}</a>
+              {% endfor %}            </span>
+                
+            </a>
+            <div class="feed_content">
+              <p class="feed_txt"><b> {{  article.user.nickname  }} </b> {{ article.content }}</p>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+
+    <div class="right_body">
+      <div class="text-center mb-2 ms-4">
+        {% if user.followers.all %}
+        {% for follower in user.followers.all %}
+      <span style="color: gray"> 회원님을 팔로우한 유저</span></div>
+
+      <div class="feed_name" style="justify-content: space-between">
+          <div style="display: flex; align-items: center; flex-direction: column;">
+              <div class="big_profile_box">
+      <a href="{% url 'accounts:detail' follower.pk %}" class="modal-followers" style="color: black; text-decoration: none;">
+                <!-- 프로필 이미지가 있으면 -->
+                {% if follower.profile.image %}
+                  <img class="profile_img" src="{{ follower.profile.image.url }}">
+                {% else %}
+                <img src="{% static 'images/dummy-image-square.jpg' %}">
+                  {% endif %}
+                <!-- 이름이 있으면 이름, 없으면 아이디 -->
+            </div>
+            
+                <div class="name_content">
+                  <span class="name_content_txt text-center"> {{follower.nickname}}</span>
+              </div>
+
+            </a>
+            {% endfor %}
+          {% else %}
+            <div class="text-center">팔로워가 없습니다.</div>
+          {% endif %}
+        </div>
+
+      </div>
+    </div>
+</div>
+
+
+
+{% endblock content %}
+
+{% block script %}
+  <script>
+
+      const form = document.querySelector("#follow-form")
+      if (form) {
+        const csrf_token = document.querySelector('[name=csrfmiddlewaretoken]').value
+        form.addEventListener('submit', function (event) {
+          event.preventDefault()
+          const userId = event.target.dataset.userId
+  
+          axios({
+            method: "post",
+            url: `/accounts/${userId}/follow/`,
+            headers: {
+              'X-CSRFToken': csrf_token
+            }
+          })
+          .then((response) => {
+            const followersCount = response.data.followers_count
+            const followingsCount = response.data.followings_count
+            const isFollowed = response.data.is_followed
+            const followBtn = document.querySelector('#follow-form > input[type=submit]')
+            if (isFollowed === true) {
+              followBtn.value = '언팔로우'
+              followBtn.classList.add('btn-secondary')
+              followBtn.classList.remove('btn-primary')
+            } else {
+              followBtn.value = '팔로우'
+              followBtn.classList.add('btn-primary')
+              followBtn.classList.remove('btn-secondary')
+            }
+  
+            const followersCountTag = document.querySelector('#followers-count')
+            const followingsCountTag = document.querySelector('#followings-count')
+            followersCountTag.innerText = followersCount
+            followingsCountTag.innerText = followingsCount
+          })
+        })
+      }
+
+    // 좋아요
+    const likeForms = document.querySelectorAll('.like-forms')
+    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value
+    likeForms.forEach(form => {
+      form.addEventListener('submit', event => {
+        event.preventDefault()
+        const articleId = event.target.dataset.articleId
+
+        axios({
+          method: 'post',
+          url: `/${articleId}/like/`,
+          headers: {'X-CSRFToken': csrfToken},
+        })
+        .then(response => {
+          const isLiked = response.data.isLiked
+          const likeBtn = document.querySelector(`#btn-like-${articleId}`)
+
+          if (isLiked === true) {
+            likeBtn.classList.add('bi-heart-fill', 'text-danger')
+            likeBtn.classList.remove('bi-heart')
+          } else {
+            likeBtn.classList.add('bi-heart')
+            likeBtn.classList.remove('bi-heart-fill', 'text-danger')
+          }
+
+          const likeCount = document.querySelector(`#like-${articleId}-count`)
+          likeCount.innerText = response.data.likeCount
+        })
+        .catch(error => {
+          console.log(error)
+        })
+      })
+    })
+
+    // 북마크
+    const bookmarkForms = document.querySelectorAll('.bookmark-forms')
+    bookmarkForms.forEach(form => {
+      form.addEventListener('submit', event => {
+        event.preventDefault()
+        const articleId = event.target.dataset.articleId
+
+        axios({
+          method: 'post',
+          url: `/${articleId}/bookmark/`,
+          headers: {'X-CSRFToken': csrfToken},
+        })
+        .then(response => {
+          const isBookmarked = response.data.isBookmarked
+          const bookmarkBtn = document.querySelector(`#btn-bookmark-${articleId}`)
+
+          if (isBookmarked === true) {
+            bookmarkBtn.classList.add('bi-bookmark-fill')
+            bookmarkBtn.classList.remove('bi-bookmark')
+          } else {
+            bookmarkBtn.classList.add('bi-bookmark')
+            bookmarkBtn.classList.remove('bi-bookmark-fill')
+          }
+        })
+        .catch(error => {
+          console.log(error)
+        })
+      })
+    })
+  </script>
+{% endblock script %}
