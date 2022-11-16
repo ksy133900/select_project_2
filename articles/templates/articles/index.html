@@ -24,6 +24,7 @@
       height: 1000px;
       left: 72%;
       position: fixed;
+      table-layout: auto;
   }
 
 .feed_box {
@@ -189,8 +190,11 @@ span {
       
 
                 <div>
+                  {% if article.location %}
                   <i class="bi bi-geo-alt-fill fs-6 text-primary"></i>
+                  
                   <span class="fs-6 text-primary ms-1 location">{{article.location}}</span>
+                  {% endif %}
                   {% if request.user.is_authenticated %}
                     <form class="bookmark-forms d-inline me-2" data-article-id="{{ article.pk }}">
                       {% if request.user in article.bookmark_users.all %}
@@ -218,6 +222,7 @@ span {
 
     <div class="right_body">
       <div class="text-center mb-2 ms-4">
+        {% if request.user.is_authenticated %}
         <span style="color: gray"> 회원님을 팔로우한 유저</span></div>
         {% if user.followers.all %}
         {% for follower in user.followers.all %}
@@ -246,6 +251,7 @@ span {
             <div class="text-center">팔로워가 없습니다.</div>
           {% endif %}
         </div>
+        {% endif %}
 
       </div>
     </div>
