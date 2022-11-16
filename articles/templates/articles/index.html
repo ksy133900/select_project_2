@@ -131,20 +131,6 @@ span {
 {% endblock css %}
 {% block content %}
 
-  <form role="search" action="{% url 'articles:search' %}" class="p-5">
-    <div class="d-flex justify-content-center">
-      <select class="form-select w-auto" name="search_option">
-        <option value="title">제목</option>
-        <option value="title_content">제목+내용</option>
-        <option value="hashtag">해시태그</option>
-        <option value="user">작성자</option>
-      </select>
-      
-      <input class="form-control w-50 mx-2" type="search" placeholder="Search" name="search">
-      <input class="btn btn-success" type="submit" value="검색">
-    </div>
-  </form>
-
   <div class="main_body">
     <div class="left_body">
         {% for article in articles %}
@@ -158,19 +144,21 @@ span {
                         {% else %}
                         <img src="{% static 'images/dummy-image-square.jpg' %}" alt="" class="rounded-2 border border-1" width="40px">
                       {% endif %}
+                    </a>
                     </div>
                     <span class="feed_name_txt"> {{ article.user.nickname }}</span>
                     
-                </a>
+                
                 </div>
           
 
 
-                
+                <a href="{% url 'articles:detail' article.pk %}">
                 {% if article.photo_set.all.0.image %}
                 <img class="feed_img" src="{{ article.photo_set.all.0.image.url }}">
                 {% else %}
                 <img src="https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg" class="card-img-top" height="300px">
+                </a>
               {% endif %}
   
          
@@ -230,9 +218,10 @@ span {
 
     <div class="right_body">
       <div class="text-center mb-2 ms-4">
+        <span style="color: gray"> 회원님을 팔로우한 유저</span></div>
         {% if user.followers.all %}
         {% for follower in user.followers.all %}
-      <span style="color: gray"> 회원님을 팔로우한 유저</span></div>
+
 
       <div class="feed_name" style="justify-content: space-between; flex-direction: column;">
           <div style="display: flex; align-items: center; flex-direction: column;">
