@@ -131,7 +131,9 @@ span {
 </style>
 {% endblock css %}
 {% block content %}
-
+{% for account in accounts %}
+{{account.nickname}}
+{% endfor %}
   <div class="main_body">
     <div class="left_body">
         {% for article in articles %}
