@@ -57,12 +57,18 @@ def detail(request, pk):
     articles = user.article_set.all()
     like_articles = user.like_articles.all()
     bookmark_articles = user.bookmark_articles.all()
+    articles_count = len(articles)
+    like_articles_count = len(like_articles)
+    bookmark_articles_count = len(bookmark_articles)
 
     context = {
-        "user": user, 
-        "articles": articles, 
+        "user": user,
+        "articles": articles,
         "like_articles": like_articles,
         "bookmark_articles": bookmark_articles,
+        "articles_count": articles_count,
+        "like_articles_count": like_articles_count,
+        "bookmark_articles_count": bookmark_articles_count,
     }
     return render(request, "accounts/detail.html", context)
 

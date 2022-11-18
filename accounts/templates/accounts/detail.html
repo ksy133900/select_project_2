@@ -45,13 +45,21 @@
         <hr>
 
         <div class="d-flex justify-content-between mb-4">
-          <div>
-            <a id="link_user_articles" data-bs-toggle="collapse" href="#user_articles" role="button" aria-expanded="false" aria-controls="collapseExample" class="me-3">내 게시글</a>
-            <a id="link_like_articles" data-bs-toggle="collapse" href="#like_articles" role="button" aria-expanded="false" aria-controls="collapseExample" class="me-3">좋아요</a>
+        
+          <div class="mb-3" style="display: flex; flex-direction: row; margin-right: 100px">
+            <div class="d-flex">
+              <div style="margin-right: 30px;"><a id="link_user_articles" data-bs-toggle="collapse" href="#user_articles" role="button" aria-expanded="false" aria-controls="collapseExample" class="me-3">
+              게시글<span class="ms-1">{{articles_count}}</a></span></div>
+            </div>
+            <div class="d-flex">
+              <div style="margin-right: 30px;"><a id="link_like_articles" data-bs-toggle="collapse" href="#like_articles" role="button" aria-expanded="false" aria-controls="collapseExample" class="me-3">좋아요
+              <span class="ms-1">{{like_articles_count}}</span> </a></div></div>
             {% if user == request.user %}
-              <a id="link_bookmark_articles" data-bs-toggle="collapse" href="#bookmark_articles" role="button" aria-expanded="false" aria-controls="collapseExample">북마크</a>
+            <div class="d-flex">
+            <div style="margin-right: 30px;"><a id="link_bookmark_articles" data-bs-toggle="collapse" href="#bookmark_articles" role="button" aria-expanded="false" aria-controls="collapseExample">북마크
+                <span class="ms-1">{{bookmark_articles_count}}</span></a></div></div>
             {% endif %}
-          </div>
+            </div>
           
           <p class="text-muted m-0">
             <span class="me-3">팔로잉 <span id="followings-count">{{ user.followings.all|length }}</span>명</span>
