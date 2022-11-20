@@ -1,7 +1,24 @@
 {% extends 'base.html' %}
 {% load django_bootstrap5 %}
 {% load static %}
-
+{% block css %}
+<style>
+  .profile_img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.big_profile_box {
+  width: 300px;
+  height: 300px;
+  border-radius: 70%;
+  overflow: hidden;
+  margin-right: 30px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+</style>
+{% endblock css %}
 {% block content %}
   <h1 class="text-center my-5">
     <span class="text-primary">{{ user.nickname }}</span>님의 페이지</h1>
@@ -9,13 +26,17 @@
   <!-- 프로필 이미지, 닉네임, 유저네임, 소개글 -->
   <div class="container d-grid p-3 rounded-4 border border-1 mb-5" style="background-color: white;">
     <div class="row row-cols-2 align-items-center">
-      <div class="col-3">
+
         {% if user.profile.image %}
-          <img src="{{ user.profile.image.url }}" alt="" class="rounded-4 border border-1 w-100">
+        <div class="col-3">
+          <div class="big_profile_box">
+  
+            <img class="profile_img" src="{{ user.profile.image.url }}">
         {% else %}
-          <img src="{% static 'images/dummy-image-square.jpg' %}" alt="" class="rounded-4 border border-1 w-100">
+            <img class="profile_img" src="{% static 'images/dummy-image-square.jpg' %}"></div>
         {% endif %}
-      </div>
+          </div>
+        </div>
 
       <div class="col-9 p-3" style="height: 100%">
         <div class="d-flex align-items-center justify-content-between">
@@ -52,7 +73,7 @@
               게시글<span class="ms-1">{{articles_count}}</a></span></div>
             </div>
             <div class="d-flex">
-              <div style="margin-right: 30px;"><a id="link_like_articles" data-bs-toggle="collapse" href="#like_articles" role="button" aria-expanded="false" aria-controls="collapseExample" class="me-3">좋아요
+              <div style="margin-right: 30px;"><a id="link_like_articles" data-bs-toggle="collapse" href="#like_articles" role="button" aria-expanded="false" aria-controls="collapseExample" class="me-3">좋아요 누른 글
               <span class="ms-1">{{like_articles_count}}</span> </a></div></div>
             {% if user == request.user %}
             <div class="d-flex">
