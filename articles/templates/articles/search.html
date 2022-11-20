@@ -3,22 +3,10 @@
 
 {% block content %}
   <div class="d-flex justify-content-center align-items-center">
-    <h1 class="mt-5">🌍🚂🛫🛬🧳🚀</h1>
+    <h1 class="my-5">검색 결과</h1>
   </div>
 
-  <form role="search" action="{% url 'articles:search' %}" class="p-5">
-    <div class="d-flex justify-content-center">
-      <select class="form-select w-auto" name="search_option">
-        <option value="title">제목</option>
-        <option value="title_content">제목+내용</option>
-        <option value="hashtag">해시태그</option>
-        <option value="user">작성자</option>
-      </select>
-      
-      <input class="form-control w-50 mx-2" type="search" placeholder="Search" name="search">
-      <input class="btn btn-success" type="submit" value="검색">
-    </div>
-  </form>
+ 
 
   <div class="row pb-5">
     {% for article in search_articles %}
