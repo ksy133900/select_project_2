@@ -15,17 +15,13 @@
 
 ![image-20221121145118155](README.assets/image-20221121145118155.png)
 
-* 게시판
-
-![Honeycam 2022-11-21 15-20-05](README.assets/Honeycam 2022-11-21 15-20-05.gif)
-
 * 글 작성
 
 ![Honeycam 2022-11-21 15-09-42](https://user-images.githubusercontent.com/103582315/202985635-349a4fde-9677-4ef7-84c9-c53b5bda4e9d.gif)
 
 * 메인페이지
 
-![Honeycam 2022-11-21 15-47-37](README.assets/Honeycam 2022-11-21 15-47-37.gif)
+![Honeycam 2022-11-21 16-06-35](https://user-images.githubusercontent.com/103582315/202986771-fb6d2005-f623-49cd-8a56-3fe0ebc151d3.gif)
 
 
 
