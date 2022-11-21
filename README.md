@@ -21,7 +21,7 @@
 
 * 글 작성
 
-![Honeycam 2022-11-21 15-09-42](README.assets/Honeycam 2022-11-21 15-09-42.gif)
+![Honeycam 2022-11-21 15-09-42](https://user-images.githubusercontent.com/103582315/202985635-349a4fde-9677-4ef7-84c9-c53b5bda4e9d.gif)
 
 * 메인페이지
 
